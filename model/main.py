@@ -21,6 +21,7 @@ def clean_data():
     data = data[(data['Classes'] == 0) | (data['Classes'] == 1)]
 
     data.drop(columns=['day'],inplace=True)
+    data.drop(columns=['year'],inplace=True)
     data.dropna(inplace=True)                                            
     data.reset_index(drop=True, inplace=True)
 
