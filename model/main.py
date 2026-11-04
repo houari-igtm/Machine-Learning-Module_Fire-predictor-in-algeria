@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 import pickle
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import cross_val_score
 
 def clean_data():
     data=pd.read_csv('data/archive/Algerian_forest_fires_dataset.csv')
@@ -26,16 +28,15 @@ def clean_data():
     data.dropna(inplace=True)                                            
     data.reset_index(drop=True, inplace=True)
 
-    print(data.isnull().sum())
-    print(data.isna().sum())
-
+   
+    
     return data      
 
 
 def main():
 
     data=clean_data()
-
+     
     y=np.array(data['Classes'])
     x=np.array(data.drop(columns='Classes'))
 
@@ -43,14 +44,13 @@ def main():
     x_scaled=scaler.fit_transform(x)
 
 
-    x_train,x_test,y_train,y_test=train_test_split(x_scaled,y,train_size=0.2,test_size=0.8)
+    x_train,x_test,y_train,y_test=train_test_split(x_scaled,y,train_size=0.8,test_size=0.2,random_state=50,stratify=y)
 
     model=LogisticRegression()
     model.fit(x_train,y_train)
 
-    y_predicted=model.predict(x_test)
-
-    print("the module accurasy is:",accuracy_score(y_test,y_predicted)*100)
+   
+   
     with open('model/model.pkl','wb') as f:
         pickle.dump(model,f)
 
