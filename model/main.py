@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 import pickle
-from sklearn.pipeline import Pipeline
+
 from sklearn.model_selection import cross_val_score
 
 def clean_data():
@@ -47,7 +47,16 @@ def main():
     x_train,x_test,y_train,y_test=train_test_split(x_scaled,y,train_size=0.8,test_size=0.2,random_state=50,stratify=y)
 
     model=LogisticRegression()
+    scores = cross_val_score(model, x_train, y_train, cv=5)
+    print("scores:", scores)
+    print("accuracy:",scores.mean())
+
     model.fit(x_train,y_train)
+
+   
+    y_pred = model.predict(x_test)
+    print("Test accuracy:", accuracy_score(y_test, y_pred))
+
 
    
    
